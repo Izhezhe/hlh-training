@@ -1,6 +1,6 @@
-# vue-test2
+# vue-test
 
-> 模版
+> app
 
 ## Build Setup
 
