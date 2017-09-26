@@ -22,32 +22,16 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var appData = require('../static/test/data.json')
-var seller = appData.seller
-var goods = appData.goods
-var ratings = appData.ratings
+var appData = require('../static/test/code.json')
+var code = appData.code
 
 // 路由，本地数据
 var apiRouters = express.Router()
 
-apiRouters.get('/seller', function (req, res) {
+apiRouters.get('/code', function (req, res) {
   res.json({
     errno: 0,
-    data: seller
-  })
-})
-
-apiRouters.get('/goods', function (req, res) {
-  res.json({
-    errno: 0,
-    data: goods
-  })
-})
-
-apiRouters.get('/ratings', function (req, res) {
-  res.json({
-    errno: 0,
-    data: ratings
+    data: code
   })
 })
 

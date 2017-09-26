@@ -2,7 +2,7 @@
   <div id="app">
     <router-view></router-view>
     <div class="tab-wrapper">
-      <div class="tab bordert-1px">
+      <div class="tab">
         <div class="tab-item">
           <router-link to="index">
             <i class="icon iconfont icon-shouye"></i>
@@ -43,12 +43,13 @@
       position fixed
       bottom 0px
       width 100%
+      z-index 50
       .tab
         display flex
         text-align center
         background #fff
         height 49px
-        bordert-1px(#e0e0e0)
+        border-top 1px solid #e0e0e0
         .tab-item
           flex 1
           padding-top 7px
