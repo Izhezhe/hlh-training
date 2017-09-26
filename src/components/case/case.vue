@@ -1,6 +1,6 @@
 <template>
   <div class="case">
-    
+    Case
   </div>
 </template>
 
