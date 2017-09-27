@@ -12,7 +12,7 @@
         <div class="tab-item">
           <router-link to="code">
             <i class="icon iconfont icon-icontianping"></i>
-            <span class="text">规划</span>
+            <span class="text">法规</span>
           </router-link>
         </div>
         <div class="tab-item">

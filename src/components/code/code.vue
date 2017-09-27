@@ -4,9 +4,16 @@
       <span class="icon iconfont icon-hua_"></span>
       <h1 class="title">法规</h1>
     </div>
+    <div class="m-search">
+      <div class="m-search-place">
+        <i class="icon iconfont icon-search"></i>
+       <span>搜索法律法规名称</span>
+      </div>
+      <input type="text" placeholder="">
+    </div>
     <div class="laws-wrapper" ref="lawsWrapper">
       <ul>
-        <li v-for="law in code.laws" class="laws-item border-1px" @click="selectLaw(law.twolaws, $event)">
+        <li v-for="law in code.laws" class="laws-item border-1px" @click="selectLaw(law, $event)">
           <div class="nowrap">
             <span>{{law.text}}</span>
           </div>
@@ -49,11 +56,11 @@
       })
     },
     methods: {
-      selectLaw (twolaws, event) {
+      selectLaw (law, event) {
         if (!event._constructed) { // 将PC端派发的事件拦截
           return
         }
-        this.selectedLaw = twolaws
+        this.selectedLaw = law.twolaws
         this.$refs.twocode.show()
       }
     },
@@ -82,15 +89,36 @@
         left 5px
         top 0px
         padding 0 10px
+    .m-search
+      text-align center
+      position fixed
+      top 60px
+      left 0
+      width 100%
+      input
+        height 30px
+        line-height 30px
+        width 75%
+        background #eeeeee
+        color #888888
+        opacity 0.8
+        border-radius 15px
+        text-align center
+        padding-left 14px
+      .m-search-place
+        position absolute
+        left 50%
+        top 8px
+        margin-left -60px
     .laws-wrapper
       position absolute
-      top 43px
+      top 91px
       bottom 50px
       width 100%
       background #fff
       overflow hidden
       .laws-item
-        padding 0 15px 0 17px
+        padding 0 16px
         line-height 43px
         font-size 17px
         border-1px(#dfdfdf)

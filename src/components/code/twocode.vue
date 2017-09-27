@@ -7,7 +7,7 @@
       </div>
       <div class="laws-wrapper" ref="twolawsWrapper">
         <ul>
-          <li v-for="twolaw in twolaws" class="laws-item border-1px">
+          <li v-for="twolaw in twolaws" class="laws-item border-1px" @click="selectLaw(twolaw,$event)">
             <div class="nowrap">
               <span>{{twolaw.text}}</span>
             </div>
@@ -15,12 +15,14 @@
           </li>
         </ul>
       </div>
+      <codedetail :twolaw="selectedLaw" ref="codedetail"></codedetail>
     </div>
   </transition>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
+  import codedetail from '@/components/codedetail/codedetail'
   export default {
     props: {
       twolaws: {
@@ -29,7 +31,8 @@
     },
     data () {
       return {
-        showFlag: false
+        showFlag: false,
+        selectedLaw: {}
       }
     },
     methods: {
@@ -45,7 +48,17 @@
           }
           this.showFlag = true
         })
+      },
+      selectLaw (twolaw, event) {
+        if (!event._constructed) { // 将PC端派发的事件拦截
+          return
+        }
+        this.selectedLaw = twolaw
+        this.$refs.codedetail.show()
       }
+    },
+    components: {
+      codedetail
     }
   }
 </script>
@@ -64,5 +77,6 @@
     &.move-enter, &.move-leave-active
       transform translate3d(100%, 0, 0)
     .laws-wrapper
+      top 43px
       bottom 0px
 </style>

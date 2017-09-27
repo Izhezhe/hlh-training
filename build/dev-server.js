@@ -22,8 +22,10 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-var appData = require('../static/test/code.json')
-var code = appData.code
+var appDataCode = require('../static/test/code.json')
+var appDataQuestions = require('../static/test/questions.json')
+var code = appDataCode.code
+var questions = appDataQuestions.questions
 
 // 路由，本地数据
 var apiRouters = express.Router()
@@ -32,6 +34,12 @@ apiRouters.get('/code', function (req, res) {
   res.json({
     errno: 0,
     data: code
+  })
+})
+apiRouters.get('/questions', function (req, res) {
+  res.json({
+    errno: 0,
+    data: questions
   })
 })
 
