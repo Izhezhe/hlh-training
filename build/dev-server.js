@@ -24,9 +24,10 @@ var app = express()
 
 var appDataCode = require('../static/test/code.json')
 var appDataQuestions = require('../static/test/questions.json')
+var caseDataCase = require('../static/test/case.json')
 var code = appDataCode.code
 var questions = appDataQuestions.questions
-
+var caseL = caseDataCase.case
 // 路由，本地数据
 var apiRouters = express.Router()
 
@@ -40,6 +41,12 @@ apiRouters.get('/questions', function (req, res) {
   res.json({
     errno: 0,
     data: questions
+  })
+})
+apiRouters.get('/caseL', function (req, res) {
+  res.json({
+    errno: 0,
+    data: caseL
   })
 })
 

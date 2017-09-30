@@ -91,11 +91,11 @@
     z-index 60
     width 100%
     height 100%
-    // transition all 0.4s
-    // &.move-transition
-    //   opacity 1
-    // &.move-enter, &.move-leave-active
-    //   opacity 0
+    transition all 0.4s
+    &.move-transition
+      opacity 1
+    &.move-enter, &.move-leave-active
+      opacity 0
     .laws-wrapper
       top 44px
       bottom 0px

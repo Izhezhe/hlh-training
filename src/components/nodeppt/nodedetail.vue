@@ -1,17 +1,17 @@
 <template>
-  <transition name="fade">
+  <transition name="noded">
     <div class="codedetail">
       <div class="header">
-        <router-link :to="{ path: 'twocode', query: { code: code } }">
+        <router-link :to="{ path: 'nodelist', query: { lid: lid, fid: fid } }">
           <span class="icon iconfont icon-fanhui"></span>
         </router-link>
-        <h1 class="title">法规</h1>
+        <h1 class="title">笔记</h1>
       </div>
-      <div class="lawdetail-wrapper" ref="detailWrapper">
+      <div class="lawdetail-wrapper" ref="wrapper">
         <div>
-          <h1 class="title">{{twolaw.text}}</h1>
+          <h1 class="title">{{list.title}}</h1>
           <div class="content">
-            <p v-for="cont in twolaw.lawDetail">{{cont}}</p>
+            <p v-for="cont in list.content">{{cont}}</p>
           </div>
         </div>
       </div>
@@ -24,10 +24,11 @@
   export default {
     data () {
       return {
-        apiUrl: '/api/code',
-        twolaw: {},
+        apiUrl: '/api/caseL',
+        list: {},
         ERR_OK: 0,
-        code: 0
+        lid: 0,
+        fid: 0
       }
     },
     created () {
@@ -39,21 +40,33 @@
     },
     methods: {
       fetchData () {
-        let code = parseInt(this.$route.query.code)
-        this.code = code
-        let twocode = parseInt(this.$route.query.twocode)
+        let lid = parseInt(this.$route.query.lid)
+        let fid = parseInt(this.$route.query.fid)
+        let nlid = parseInt(this.$route.query.nlid)
+        this.lid = lid
+        this.fid = fid
         this.$http.get(this.apiUrl).then((res) => {
           res = res.body
           if (res.errno === this.ERR_OK) {
-            let laws = res.data.laws
-            laws.forEach((law) => {
-              if (law.code === code) {
-                let twolaws = law.twolaws
-                twolaws.forEach((twolaw) => {
-                  if (twolaw.twocode === twocode) {
-                    this.twolaw = twolaw
-                    this.$nextTick(() => {
-                      this.initScroll()
+            let leves = res.data.leves
+            leves.forEach((leve) => {
+              if (leve.lid === lid) {
+                let fragtrains = leve.fragtrains
+                fragtrains.forEach((train) => {
+                  if (train.fid === fid) {
+                    let nodelists = train.nodeLists
+                    nodelists.forEach((nodelist) => {
+                      if (nodelist.type === 1) {
+                        let lists = nodelist.lists
+                        lists.forEach((list) => {
+                          if (list.nlid === nlid) {
+                            this.list = list
+                            this.$nextTick(() => {
+                              this.initScroll()
+                            })
+                          }
+                        })
+                      }
                     })
                   }
                 })
@@ -64,7 +77,7 @@
       },
       initScroll () {
         if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.detailWrapper, {
+          this.scroll = new BScroll(this.$refs.wrapper, {
             click: true
           })
         } else {
@@ -84,9 +97,9 @@
     width 100%
     height 100%
     // transition all 0.4s
-    // &.fade-transition
+    // &.noded-transition
     //   opacity 1
-    // &.fade-enter, &.fade-leave-active
+    // &.noded-enter, &.noded-leave-active
     //   opacity 0
     .lawdetail-wrapper
       position absolute

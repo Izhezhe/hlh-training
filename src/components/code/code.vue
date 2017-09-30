@@ -1,41 +1,43 @@
 <template>
   <div class="code">
     <div class="header">
-      <span class="icon iconfont icon-hua_"></span>
+      <router-link to="/index">
+        <span class="icon iconfont icon-fanhui"></span>
+      </router-link>
       <h1 class="title">法规</h1>
     </div>
-    <div class="m-search">
+    <div class="m-search2">   
       <div class="m-search-place">
         <i class="icon iconfont icon-search"></i>
        <span>搜索法律法规名称</span>
       </div>
-      <input type="text" placeholder="">
+      <input type="text" placeholder="" class="input-bg" readonly @click.stop.prevent="none">
     </div>
     <div class="laws-wrapper" ref="lawsWrapper">
       <ul>
-        <li v-for="law in code.laws" class="laws-item border-1px" @click="selectLaw(law, $event)">
-          <div class="nowrap">
-            <span>{{law.text}}</span>
-          </div>
-          <span class="num">{{law.twolaws.length}}</span>
-          <span class="icon iconfont icon-hua_"></span>
+        <li v-for="law in code.laws" class="laws-item border-1px">
+          <router-link to="" @click.native="toDetail(law)">
+            <div class="nowrap">
+              <span>{{law.text}}</span>
+            </div>
+            <span class="num">{{law.twolaws.length}}</span>
+            <span class="icon iconfont icon-gengduo"></span>
+          </router-link>
         </li>
       </ul>
     </div>
-    <twocode :twolaws="selectedLaw" ref="twocode"></twocode>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
-  import twocode from '@/components/code/twocode'
   export default {
     data () {
       return {
         apiUrl: '/api/code',
         code: {},
-        ERR_OK: 0,
-        selectedLaw: []
+        ERR_OK: 0
       }
     },
     created () {
@@ -56,16 +58,17 @@
       })
     },
     methods: {
-      selectLaw (law, event) {
-        if (!event._constructed) { // 将PC端派发的事件拦截
-          return
-        }
-        this.selectedLaw = law.twolaws
-        this.$refs.twocode.show()
+      none () {
+        window.alert('暂无搜索功能')
+      },
+      toDetail (law) {
+        this.$router.push({
+          path: '/code/twocode',
+          query: {
+            code: `${law.code}`
+          }
+        })
       }
-    },
-    components: {
-      twocode
     }
   }
 </script>
@@ -75,44 +78,44 @@
   .code
     .header
       width 100%
-      height 43px
+      height 44px
       background #151418
       text-align center
       font-size 0
       .icon, .title
         display inline-block
-        line-height 43px
+        line-height 44px
         font-size 19px
         color #fff
       .icon
         position absolute
         left 5px
-        top 0px
+        top 2px
         padding 0 10px
-    .m-search
+    .m-search2
+      margin 10px 0
       text-align center
-      position fixed
-      top 60px
-      left 0
-      width 100%
+      padding 0 15px
+      position relative
       input
         height 30px
         line-height 30px
-        width 75%
-        background #eeeeee
+        width 100%
         color #888888
         opacity 0.8
         border-radius 15px
         text-align center
-        padding-left 14px
+        background #eeeeee
       .m-search-place
         position absolute
         left 50%
-        top 8px
+        top 0px
+        line-height 30px
+        font-size 14px
         margin-left -60px
     .laws-wrapper
       position absolute
-      top 91px
+      top 92px
       bottom 50px
       width 100%
       background #fff
@@ -140,5 +143,6 @@
           position absolute
           right 15px
           top 0px
-          font-size 14px
+          font-size 12px
+          color #bbbbc1
 </style>

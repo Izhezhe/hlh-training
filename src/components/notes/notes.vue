@@ -1,10 +1,8 @@
 <template>
-  <div class="questions">
+  <div class="code">
     <div class="header">
-      <router-link to="/index">
-        <span class="icon iconfont icon-fanhui"></span>
-      </router-link>
-      <h1 class="title">考题</h1>
+      <span class="icon iconfont icon-fanhui"></span>
+      <h1 class="title">法规</h1>
     </div>
     <div class="m-search2">   
       <div class="m-search-place">
@@ -13,14 +11,14 @@
       </div>
       <input type="text" placeholder="" class="input-bg" readonly @click.stop.prevent="none">
     </div>
-    <div class="laws-wrapper" ref="quesWrapper">
+    <div class="laws-wrapper" ref="lawsWrapper">
       <ul>
-        <li v-for="question in questions.questions" class="laws-item border-1px">
-          <router-link to="" @click.native="toDetail(question)">
+        <li v-for="law in code.laws" class="laws-item border-1px">
+          <router-link to="" @click.native="toDetail(law)">
             <div class="nowrap">
-              <span>{{question.text}}</span>
+              <span>{{law.text}}</span>
             </div>
-            <span class="num">{{question.issues.length}}</span>
+            <span class="num">{{law.twolaws.length}}</span>
             <span class="icon iconfont icon-gengduo"></span>
           </router-link>
         </li>
@@ -35,8 +33,8 @@
   export default {
     data () {
       return {
-        apiUrl: '/api/questions',
-        questions: {},
+        apiUrl: '/api/code',
+        code: {},
         ERR_OK: 0
       }
     },
@@ -44,10 +42,10 @@
       this.$http.get(this.apiUrl).then((res) => {
         res = res.body
         if (res.errno === this.ERR_OK) {
-          this.questions = res.data
+          this.code = res.data
           this.$nextTick(() => {
             if (!this.scroll) {
-              this.scroll = new BScroll(this.$refs.quesWrapper, {
+              this.scroll = new BScroll(this.$refs.lawsWrapper, {
                 click: true
               })
             } else {
@@ -59,13 +57,13 @@
     },
     methods: {
       none () {
-        alert('暂无搜索功能')
+        window.alert('暂无搜索功能')
       },
-      toDetail (ques) {
+      toDetail (law) {
         this.$router.push({
-          path: '/questions/quesdetail',
+          path: '/code/twocode',
           query: {
-            code: `${ques.code}`
+            code: `${law.code}`
           }
         })
       }
@@ -75,7 +73,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
-  .questions
+  .code
     .header
       width 100%
       height 44px
@@ -115,13 +113,13 @@
         margin-left -60px
     .laws-wrapper
       position absolute
-      top 91px
+      top 92px
       bottom 50px
       width 100%
       background #fff
       overflow hidden
       .laws-item
-        padding 0 15px 0 17px
+        padding 0 16px
         line-height 43px
         font-size 17px
         border-1px(#dfdfdf)

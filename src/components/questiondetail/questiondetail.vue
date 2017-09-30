@@ -1,8 +1,10 @@
 <template>
   <transition name="move">
-    <div v-show="showFlag" class="ques-detail">
+    <div class="ques-detail">
       <div class="header">
-        <span class="icon iconfont icon-hua_" @click="showFlag = !showFlag"></span>
+        <router-link to="/questions">
+          <span class="icon iconfont icon-fanhui"></span>
+        </router-link>
         <h1 class="title">考题</h1>
       </div>
       <div class="questions-wrapper" ref="questionsWrapper">
@@ -12,12 +14,16 @@
             <span class="title">单选题</span>
           </div>
           <ul>
-            <li v-for="( question,index ) in questions" class="question-item">
+            <li v-for="( issue,index ) in issues" class="question-item">
               <span class="order">{{index+1}}.</span>
-              <span class="issue">{{question.issue}}</span>
-              <div class="answer">
-                <span class="icon iconfont icon-hua_"></span>
-                <span class="text">{{question.answer}}</span>
+              <span class="issue" v-for="iss in issue.issue">{{iss}}</span>
+              <div class="answer" v-for="option in issue.answer">
+                <span class="icon iconfont" :class="{'icon-zhengquedaan':option.type===1}"></span>
+                <span class="text">{{option.option}}</span>
+              </div>
+              <div class="analyze">
+                <h1 class="title">答案解析：</h1>
+                <p class="content" v-for="list in issue.analyze">{{list}}</p>
               </div>
             </li>
           </ul>
@@ -30,29 +36,46 @@
 <script>
   import BScroll from 'better-scroll'
   export default {
-    props: {
-      questions: {
-        type: Array
-      }
-    },
     data () {
       return {
-        showFlag: false
+        apiUrl: '/api/questions',
+        issues: [],
+        ERR_OK: 0
       }
     },
+    created () {
+      this.fetchData()
+    },
+    watch: {
+      // 如果路由有变化，会再次执行该方法
+      '$route': 'fetchData'
+    },
     methods: {
-      show () {
-        this.showFlag = true
-        this.$nextTick(() => {
-          if (!this.scroll) {
-            this.scroll = new BScroll(this.$refs.questionsWrapper, {
-              click: true
+      fetchData () {
+        let code = parseInt(this.$route.query.code)
+        this.$http.get(this.apiUrl).then((res) => {
+          res = res.body
+          if (res.errno === this.ERR_OK) {
+            let questions = res.data.questions
+            questions.forEach((ques) => {
+              if (ques.code === code) {
+                this.issues = ques.issues
+                this.$nextTick(() => {
+                  this.initScroll()
+                })
+              }
             })
-          } else {
-            this.scroll.refresh()
           }
-          this.showFlag = true
         })
+      },
+      initScroll () {
+        if (!this.scroll) {
+          this.scroll = new BScroll(this.$refs.questionsWrapper, {
+            click: true
+          })
+        } else {
+          this.scroll.refresh()
+        }
       }
     }
   }
@@ -66,14 +89,14 @@
     z-index 60
     width 100%
     height 100%
-    transition all 0.4s
-    &.move-transition
-      transform translate3d(0, 0, 0)
-    &.move-enter, &.move-leave-active
-      transform translate3d(100%, 0, 0)
+    // transition all 0.4s
+    // &.move-transition
+    //   opacity 1
+    // &.move-enter, &.move-leave-active
+    //   opacity 0
     .questions-wrapper
       position absolute
-      top 43px
+      top 44px
       bottom 0px
       width 100%
       background #fff
@@ -91,7 +114,7 @@
             color #59b0f5
       .question-item
         padding-right 16px
-        padding 0 16px 30px
+        padding 0 16px 25px
         font-size 0
         position relative
         .order, .issue
@@ -99,6 +122,7 @@
           line-height 25px
           font-size 18px
           color #3c3c3c
+          margin-top 5px
         .order
           position absolute
           left 15px
@@ -113,14 +137,25 @@
           .icon
             display inline-block
             vertical-align top
-            font-size 20px
+            font-size 22px
             color #59b0f5
             position absolute
           .text
             display inline-block
             vertical-align top
-            padding-left 40px
+            margin-top -1px
+            padding-left 35px
             line-height 24px
             font-size 16px
             color #6c6c6c
+        .analyze
+          margin-top 10px
+          color #6c6c6c
+          .title
+            line-height 18px
+            font-size 18px
+          .content
+            line-height 24px
+            font-size 16px
+            margin-top 10px
 </style>
